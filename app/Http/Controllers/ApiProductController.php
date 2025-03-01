@@ -140,12 +140,11 @@ class ApiProductController extends Controller
     {
         try {
             $validated = $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'quantity' => 'required|integer|min:1',
             ]);
 
             $product = Product::findOrFail($id);
-            $user = User::findOrFail($request->user_id);
+            $user = $request->user(); // Get authenticated user
 
             if ($product->quantity_available < $validated['quantity']) {
                 return response()->json([
@@ -192,6 +191,11 @@ class ApiProductController extends Controller
                 'status' => 'error',
                 'message' => 'Product not found'
             ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }
