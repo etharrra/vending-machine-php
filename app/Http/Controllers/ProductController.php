@@ -115,12 +115,14 @@ class ProductController extends Controller
 
         $totalPrice = $product->price * $request->quantity;
 
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
+        try {
+            // Update product quantity
             $product->quantity_available -= $request->quantity;
             $product->save();
 
+            // Log the transaction
             Transaction::create([
                 'user_id' => Auth::user()->id,
                 'product_id' => $product->id,
@@ -129,9 +131,11 @@ class ProductController extends Controller
             ]);
 
             DB::commit();
+
             return redirect()->route('dashboard')->with('success', 'Product purchased successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
+
             return redirect()->back()->with('error', 'Failed to process the purchase. Please try again.');
         }
     }
