@@ -2,10 +2,6 @@
 
 A Laravel-based Application for managing a virtual vending machine system. This application handles product management, user authentication, and purchase transactions.
 
-## Live Demo
-
-URL: http://ec2-54-251-177-213.ap-southeast-1.compute.amazonaws.com/
-
 ## Features
 
 -   Token-based Authentication using Laravel Sanctum
